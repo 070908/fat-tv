@@ -38,6 +38,10 @@ public class MusicPlaybackService extends MediaSessionService {
         return Holder.INSTANCE != null ? Holder.INSTANCE.player : null;
     }
 
+    public static MusicPlaybackService getInstance() {
+        return Holder.INSTANCE;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

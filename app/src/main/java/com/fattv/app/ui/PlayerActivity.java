@@ -87,7 +87,6 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private MusicPlaybackService getServiceInstance() {
-        return MusicPlaybackService.getPlayerInstance() != null ?
-            (MusicPlaybackService) MusicPlaybackService.class.getProtectionDomain().getClassLoader() : null;
+        return MusicPlaybackService.getInstance();
     }
 }
