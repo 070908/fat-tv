@@ -18,21 +18,29 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "11076708"
-
-      - name: Accept licenses
+      - name: Install Android SDK manually
         run: |
-          mkdir -p $ANDROID_SDK_ROOT/licenses
-          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_SDK_ROOT/licenses/android-sdk-license
-          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" >> $ANDROID_SDK_ROOT/licenses/android-sdk-license
-          echo "84831b9409646a918e30573bab4c9c91346d8abd" >> $ANDROID_SDK_ROOT/licenses/android-sdk-license
-
-      - name: Install SDK components
-        run: |
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          mkdir -p $ANDROID_SDK_ROOT
+          cd $HOME
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip -d android-sdk/
+          mkdir -p android-sdk/cmdline-tools/latest
+          mv android-sdk/cmdline-tools/* android-sdk/cmdline-tools/latest/ 2>/dev/null || true
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+          # 强制接受所有许可证（非交互）
+          yes | sdkmanager --licenses || true
+          # 安装构建依赖
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          # 将路径写入环境文件供后续步骤使用
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+          echo "SDK installed at $ANDROID_SDK_ROOT"
+          ls -la $ANDROID_SDK_ROOT/platforms/
+          ls -la $ANDROID_SDK_ROOT/build-tools/
 
       - name: Cache Gradle
         uses: actions/cache@v4
@@ -45,7 +53,7 @@ jobs:
             gradle-${{ runner.os }}-
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
