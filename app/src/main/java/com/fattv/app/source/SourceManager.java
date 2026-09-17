@@ -36,7 +36,9 @@ public class SourceManager {
         String pluginUrl = prefs.getString(KEY_PUBLIC_PLUGIN, "");
 
         // 注册所有音源
-        providers.add(new PublicSourceAdapter(pluginUrl));
+        PublicSourceAdapter publicAdapter = new PublicSourceAdapter(pluginUrl);
+        publicAdapter.init(context);
+        providers.add(publicAdapter);
         providers.add(new LocalSourceAdapter(localUrl));
 
         // 恢复上次选择的音源
@@ -103,7 +105,7 @@ public class SourceManager {
         savePreference(KEY_PUBLIC_PLUGIN, url);
         for (SourceProvider p : providers) {
             if (p instanceof PublicSourceAdapter) {
-                // TODO: 更新插件地址
+                ((PublicSourceAdapter) p).setPluginUrl(url);
                 break;
             }
         }

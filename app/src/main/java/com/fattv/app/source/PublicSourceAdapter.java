@@ -1,20 +1,26 @@
 package com.fattv.app.source;
 
+import android.content.Context;
+
+import com.fattv.app.jsengine.JSRuntime;
 import com.fattv.app.model.Song;
-import com.fattv.app.utils.HttpUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 公网音源适配器 - 执行 MusicFree / LX 音源 JS 脚本（占位实现）
- * 实际运行时：内嵌 QuickJS 引擎执行音源脚本，返回搜索/解析结果
+ * 公网音源适配器 - 基于 JSRuntime (Rhino 引擎) 执行音源脚本
  */
 public class PublicSourceAdapter implements SourceProvider {
     private static final String TAG = "PublicSource";
-    private boolean healthy = true;
-    private String pluginUrl; // 第三方音源插件地址
+    private static final String DEFAULT_SCRIPT_PATH = "scripts/default-music.js";
+    private static final String DEFAULT_SCRIPT_ID = "demo";
+    private static final String DEFAULT_SCRIPT_NAME = "\u793a\u4f8b\u97f3\u6e90";
+
+    private boolean healthy = false;
+    private JSRuntime jsRuntime;
+    private String pluginUrl; // 用户导入的自定义脚本路径/URL
+    private Context appContext;
 
     public PublicSourceAdapter() {}
 
@@ -22,9 +28,28 @@ public class PublicSourceAdapter implements SourceProvider {
         this.pluginUrl = pluginUrl;
     }
 
+    /**
+     * 初始化引擎并加载脚本。应在 SourceManager.init() 之后调用。
+     */
+    public void init(Context context) {
+        this.appContext = context.getApplicationContext();
+        jsRuntime = new JSRuntime();
+        jsRuntime.init();
+
+        boolean loaded;
+        if (pluginUrl != null && !pluginUrl.isEmpty()) {
+            // TODO: 从自定义路径/URL 加载脚本
+            loaded = jsRuntime.loadScriptFromAssets(appContext, DEFAULT_SCRIPT_PATH, DEFAULT_SCRIPT_ID, DEFAULT_SCRIPT_NAME);
+        } else {
+            loaded = jsRuntime.loadScriptFromAssets(appContext, DEFAULT_SCRIPT_PATH, DEFAULT_SCRIPT_ID, DEFAULT_SCRIPT_NAME);
+        }
+        healthy = loaded;
+    }
+
     @Override
     public String getName() {
-        return "\u516c\u7f51\u97f3\u6e90";
+        JSRuntime.ScriptInfo info = jsRuntime != null ? jsRuntime.getCurrentScriptInfo() : null;
+        return info != null ? info.name : "\u516c\u7f51\u97f3\u6e90";
     }
 
     @Override
@@ -34,33 +59,22 @@ public class PublicSourceAdapter implements SourceProvider {
 
     @Override
     public List<Song> search(String keyword, int page) throws Exception {
-        // TODO: 集成 QuickJS 引擎执行音源脚本
-        // 占位：返回模拟数据供 UI 测试
-        List<Song> result = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Song s = new Song();
-            s.id = "pub_" + i;
-            s.title = keyword + " \u6d4b\u8bd5\u66f2\u76ee " + (i + 1);
-            s.artist = "\u6d4b\u8bd5\u827a\u4eba";
-            s.album = "\u6d4b\u8bd5\u4e13\u8f91";
-            s.duration = 180000;
-            s.sourceType = SourceType.PUBLIC;
-            result.add(s);
-        }
-        return result;
+        if (jsRuntime == null) return new ArrayList<>();
+        List<Song> result = jsRuntime.search(keyword, page);
+        return result != null ? result : new ArrayList<>();
     }
 
     @Override
     public String resolveUrl(Song song) throws Exception {
-        // TODO: QuickJS 执行 getMediaSource 获取真实播放链接
-        // 占位：返回测试音频 URL
-        return "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+        if (jsRuntime == null) return null;
+        // 默认使用 128k 音质
+        return jsRuntime.resolveUrl(song.id, "128k");
     }
 
     @Override
     public String getLyric(Song song) throws Exception {
-        // TODO: QuickJS 执行 getLyric
-        return "[00:00.00]\u6682\u65e0\u6b4c\u8bcd\u4fe1\u606f";
+        if (jsRuntime == null) return null;
+        return jsRuntime.getLyric(song.id);
     }
 
     @Override
@@ -70,12 +84,19 @@ public class PublicSourceAdapter implements SourceProvider {
 
     @Override
     public void checkHealth() {
-        // 检测音源插件连通性
-        try {
-            // 快速连通性测试（占位）
-            healthy = true;
-        } catch (Exception e) {
-            healthy = false;
+        healthy = (jsRuntime != null && jsRuntime.getCurrentScriptInfo() != null);
+    }
+
+    public void setPluginUrl(String url) {
+        this.pluginUrl = url;
+        // TODO: 重新加载脚本
+    }
+
+    public void destroy() {
+        if (jsRuntime != null) {
+            jsRuntime.destroy();
+            jsRuntime = null;
         }
+        healthy = false;
     }
 }
