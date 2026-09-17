@@ -19,11 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.2'
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -33,8 +28,11 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Build with Gradle
-        run: gradle assembleDebug --stacktrace
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version=8.2
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
