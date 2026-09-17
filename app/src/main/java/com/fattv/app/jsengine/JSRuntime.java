@@ -1,6 +1,5 @@
 package com.fattv.app.jsengine;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.fattv.app.model.Song;
@@ -9,7 +8,6 @@ import com.fattv.app.source.SourceProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mozilla.javascript.Callable;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeJSON;
 import org.mozilla.javascript.Scriptable;
@@ -38,7 +36,7 @@ public class JSRuntime {
     private static final int OPTIMIZATION_LEVEL = -1; // -1 = interpreted mode (stable on Android)
     private static final int OKHTTP_TIMEOUT_SEC = 15;
 
-    private Context rhino;
+    private org.mozilla.javascript.Context rhino;
     private Scriptable globalScope;
     private OkHttpClient httpClient;
     private boolean initialized = false;
@@ -61,10 +59,10 @@ public class JSRuntime {
     public synchronized void init() {
         if (initialized) return;
         try {
-            Context.enter();
-            rhino = Context.getCurrentContext();
+            org.mozilla.javascript.Context.enter();
+            rhino = org.mozilla.javascript.Context.getCurrentContext();
             rhino.setOptimizationLevel(OPTIMIZATION_LEVEL);
-            rhino.setLanguageVersion(Context.VERSION_ES6);
+            rhino.setLanguageVersion(org.mozilla.javascript.Context.VERSION_ES6);
 
             globalScope = rhino.initStandardObjects();
 
@@ -130,7 +128,7 @@ public class JSRuntime {
     /**
      * 从 assets 目录加载脚本
      */
-    public boolean loadScriptFromAssets(Context context, String assetPath, String scriptId, String scriptName) {
+    public boolean loadScriptFromAssets(android.content.Context context, String assetPath, String scriptId, String scriptName) {
         try {
             InputStream is = context.getAssets().open(assetPath);
             String content = readStream(is);
@@ -228,7 +226,7 @@ public class JSRuntime {
     public synchronized void destroy() {
         try {
             if (rhino != null) {
-                Context.exit();
+                org.mozilla.javascript.Context.exit();
             }
         } catch (Exception e) {
             Log.w(TAG, "Destroy warning", e);
@@ -301,7 +299,7 @@ public class JSRuntime {
     private class HttpGetCallable extends ScriptableObject implements Callable {
         @Override public String getClassName() { return "HttpGetCallable"; }
         @Override
-        public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
             if (args.length < 1) return "";
             String url = org.mozilla.javascript.Context.toString(args[0]);
             String headersJson = args.length > 1 ? org.mozilla.javascript.Context.toString(args[1]) : "{}";
@@ -335,7 +333,7 @@ public class JSRuntime {
     private class HttpPostCallable extends ScriptableObject implements Callable {
         @Override public String getClassName() { return "HttpPostCallable"; }
         @Override
-        public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
             if (args.length < 2) return "";
             String url = org.mozilla.javascript.Context.toString(args[0]);
             String body = org.mozilla.javascript.Context.toString(args[1]);
@@ -367,7 +365,7 @@ public class JSRuntime {
     private class LogCallable extends ScriptableObject implements Callable {
         @Override public String getClassName() { return "LogCallable"; }
         @Override
-        public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
             if (args.length < 2) return Undefined.instance;
             String level = org.mozilla.javascript.Context.toString(args[0]);
             String msg = org.mozilla.javascript.Context.toString(args[1]);
@@ -383,7 +381,7 @@ public class JSRuntime {
     private class GetCacheCallable extends ScriptableObject implements Callable {
         @Override public String getClassName() { return "GetCacheCallable"; }
         @Override
-        public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
             // 预留接口：可接入 SharedPreferences 或内存缓存
             return null;
         }
@@ -392,7 +390,7 @@ public class JSRuntime {
     private class SetCacheCallable extends ScriptableObject implements Callable {
         @Override public String getClassName() { return "SetCacheCallable"; }
         @Override
-        public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
             // 预留接口：可接入 SharedPreferences 或内存缓存
             return Undefined.instance;
         }
