@@ -1,7 +1,8 @@
-.dumate/
+fat-tv-fixed.apk
+app/build/
 build/
 .gradle/
-local.properties
+.dumate/
 .idea/
 *.iml
-app/build/
+local.properties
