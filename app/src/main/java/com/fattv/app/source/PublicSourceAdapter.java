@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class PublicSourceAdapter implements SourceProvider {
     private static final String TAG = "PublicSource";
-    private static final String DEFAULT_SCRIPT_PATH = "scripts/default-music.js";
-    private static final String DEFAULT_SCRIPT_ID = "demo";
-    private static final String DEFAULT_SCRIPT_NAME = "\u793a\u4f8b\u97f3\u6e90";
+    private static final String DEFAULT_SCRIPT_PATH = "scripts/real-music.js";
+    private static final String DEFAULT_SCRIPT_ID = "netease";
+    private static final String DEFAULT_SCRIPT_NAME = "\u7f51\u6613\u4e91\u97f3\u4e50";
 
     private boolean healthy = false;
     private JSRuntime jsRuntime;
