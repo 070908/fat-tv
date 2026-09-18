@@ -23,12 +23,18 @@ import com.fattv.app.model.Song;
 import com.fattv.app.source.SourceManager;
 import com.fattv.app.ui.PlayerActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MusicPlaybackService - Media3 ExoPlayer + MediaSession 后台播放服务
  */
 public class MusicPlaybackService extends MediaSessionService {
     private static final String CHANNEL_ID = "fat_tv_playback";
     private static final int NOTIF_ID = 1;
+    private static final int MAX_HISTORY = 100;
+
+    private static final List<Song> playHistory = new ArrayList<>();
 
     private ExoPlayer player;
     private MediaSession mediaSession;
@@ -40,6 +46,31 @@ public class MusicPlaybackService extends MediaSessionService {
 
     public static MusicPlaybackService getInstance() {
         return Holder.INSTANCE;
+    }
+
+    /**
+     * 获取最近播放历史（最新在前）
+     */
+    public static List<Song> getPlayHistory() {
+        return playHistory;
+    }
+
+    /**
+     * 记录一条播放历史：同 id 去重后置顶，超出上限淘汰最旧
+     */
+    public static void addToHistory(Song song) {
+        if (song == null) return;
+        for (int i = 0; i < playHistory.size(); i++) {
+            Song s = playHistory.get(i);
+            if (s.id != null && s.id.equals(song.id)) {
+                playHistory.remove(i);
+                break;
+            }
+        }
+        playHistory.add(0, song);
+        while (playHistory.size() > MAX_HISTORY) {
+            playHistory.remove(playHistory.size() - 1);
+        }
     }
 
     @Override
@@ -63,6 +94,7 @@ public class MusicPlaybackService extends MediaSessionService {
     }
 
     public void playSong(Song song) {
+        addToHistory(song);
         new Thread(() -> {
             try {
                 String url = SourceManager.getInstance().getCurrentProvider().resolveUrl(song);

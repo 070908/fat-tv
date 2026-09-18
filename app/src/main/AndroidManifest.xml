@@ -41,6 +41,9 @@
             android:name=".ui.PlayerActivity"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".ui.PlaylistActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".ui.SettingsActivity"
             android:screenOrientation="landscape" />
 

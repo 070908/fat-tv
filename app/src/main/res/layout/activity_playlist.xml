@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_primary">
+
+    <!-- 背景氛围（半透明黑，隐约透出可能的全局背景） -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_overlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/tv_safe_margin">
+
+        <!-- 顶部标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playlist"
+            android:textSize="@dimen/text_display"
+            android:textColor="@color/text_accent"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <!-- 空态提示 -->
+        <TextView
+            android:id="@+id/tv_empty_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\u6682\u65e0\u64ad\u653e\u8bb0\u5f55\uff0c\u8bf7\u5148\u5728\u641c\u7d22\u9875\u64ad\u653e\u97f3\u4e50"
+            android:textSize="@dimen/text_headline"
+            android:textColor="@color/text_secondary"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_xxxl" />
+
+        <!-- 播放历史/播放列表 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_lg" />
+    </LinearLayout>
+</FrameLayout>
