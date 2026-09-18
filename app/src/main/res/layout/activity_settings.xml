@@ -85,7 +85,7 @@
             android:padding="12dp"
             android:layout_marginBottom="32dp" />
 
-        <View
+<FrameLayout
             android:id="@+id/btn_save"
             android:layout_width="200dp"
             android:layout_height="60dp"
@@ -99,7 +99,7 @@
                 android:text="\u4fdd\u5b58\u8bbe\u7f6e"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
-                android:layout_gravity="center" />
-        </View>
+android:layout_gravity="center" />
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>
