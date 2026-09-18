@@ -6,3 +6,12 @@ build/
 .idea/
 *.iml
 local.properties
+*.apk
+*.aab
+*.keystore
+
+# Gradle Wrapper binaries (must be tracked for standalone builds)
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
