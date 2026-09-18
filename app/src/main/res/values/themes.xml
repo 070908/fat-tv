@@ -1,7 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- fat TV 主主题 - 黑金配色，适配 TV 10英尺体验 -->
     <style name="Theme.fatTV" parent="Theme.AppCompat.NoActionBar">
+        <!-- 基础窗口属性 -->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowBackground">@color/bg_primary</item>
+        
+        <!-- TV 焦点导航优化 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        
+        <!-- 默认文字颜色 -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        
+        <!-- 强调色（金色） -->
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/accent_pressed</item>
+        
+        <!-- 控件默认样式 -->
+        <item name="android:editTextColor">@color/text_primary</item>
+        <item name="android:textViewStyle">@style/TVTextBody</item>
+    </style>
+    
+    <!-- 页面标题文字 -->
+    <style name="TVTextDisplay" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_display</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <!-- 歌曲名/标题 -->
+    <style name="TVTextTitle" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    
+    <!-- 正文/列表主文字 -->
+    <style name="TVTextBody" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    
+    <!-- 次要文字 -->
+    <style name="TVTextCaption" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    
+    <!-- 小标签/时长 -->
+    <style name="TVTextSmall" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+    
+    <!-- 金色强调文字 -->
+    <style name="TVTextAccent" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_accent</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

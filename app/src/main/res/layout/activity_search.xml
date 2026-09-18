@@ -1,27 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#CC000000"
-    android:padding="32dp">
+    android:background="@color/bg_primary">
 
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="\u8f93\u5165\u6b4c\u66f2\u540d\u79f0\u641c\u7d22..."
-        android:textColor="#FFFFFF"
-        android:textColorHint="#888888"
-        android:textSize="22sp"
-        android:background="@drawable/btn_focusable"
-        android:padding="12dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_results"
+    <!-- 背景氛围（半透明黑，隐约透出可能的全局背景） -->
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
-</LinearLayout>
+        android:background="@color/bg_overlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/tv_safe_margin">
+
+        <!-- 顶部标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_music"
+            android:textSize="@dimen/text_display"
+            android:textColor="@color/text_accent"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <!-- 搜索输入框：金色边框焦点态 -->
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_input_height"
+            android:hint="@string/search_hint"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:textSize="@dimen/text_body"
+            android:background="@drawable/input_focusable"
+            android:padding="@dimen/search_input_padding"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:layout_marginBottom="@dimen/spacing_md" />
+
+        <!-- 搜索结果列表 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_lg" />
+    </LinearLayout>
+</FrameLayout>

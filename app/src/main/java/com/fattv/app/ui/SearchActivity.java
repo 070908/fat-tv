@@ -38,9 +38,25 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new SongAdapter(results, this::onSongClick);
         rvResults.setAdapter(adapter);
 
+        // 搜索框焦点动画：金色边框已通过 input_focusable drawable 处理
+        etSearch.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                etSearch.setTextColor(getResources().getColor(R.color.accent));
+            } else {
+                etSearch.setTextColor(getResources().getColor(R.color.text_primary));
+            }
+        });
+
         etSearch.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
                 doSearch();
+                // 搜索后自动将焦点移到列表第一项
+                rvResults.post(() -> {
+                    if (adapter.getItemCount() > 0) {
+                        RecyclerView.ViewHolder holder = rvResults.findViewHolderForAdapterPosition(0);
+                        if (holder != null) holder.itemView.requestFocus();
+                    }
+                });
                 return true;
             }
             return false;

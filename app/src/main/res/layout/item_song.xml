@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="@dimen/song_item_height"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:padding="@dimen/song_item_padding"
     android:gravity="center_vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/item_focusable">
+    android:clickable="true"
+    android:background="@drawable/card_item_focusable">
 
+    <!-- 歌曲封面 -->
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="@dimen/song_cover_size"
+        android:layout_height="@dimen/song_cover_size"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_logo"
+        android:background="@drawable/bg_surface" />
+
+    <!-- 歌曲信息 -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginStart="@dimen/spacing_md"
         android:orientation="vertical">
 
         <TextView
@@ -20,15 +32,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Song Title"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF" />
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1" />
 
-        <TextView
-            android:id="@+id/tv_artist"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Artist"
-            android:textSize="16sp"
-            android:textColor="#AAAAAA" />
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_xs">
+
+            <TextView
+                android:id="@+id/tv_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Artist"
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_secondary"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  •  "
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:id="@+id/tv_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Album"
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_secondary"
+                android:ellipsize="end"
+                android:maxLines="1" />
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- 时长 -->
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="03:45"
+        android:textSize="@dimen/text_small"
+        android:textColor="@color/text_accent"
+        android:layout_marginStart="@dimen/spacing_sm" />
 </LinearLayout>

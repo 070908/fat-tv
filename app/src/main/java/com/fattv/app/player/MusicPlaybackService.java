@@ -78,6 +78,22 @@ public class MusicPlaybackService extends MediaSessionService {
         }).start();
     }
 
+    public void pause() {
+        if (player != null) player.pause();
+    }
+
+    public void resume() {
+        if (player != null) player.play();
+    }
+
+    public long getCurrentPosition() {
+        return player != null ? player.getCurrentPosition() : 0;
+    }
+
+    public long getDuration() {
+        return player != null ? player.getDuration() : 0;
+    }
+
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(

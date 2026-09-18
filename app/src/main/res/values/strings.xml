@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">fat TV</string>
+    <string name="search_music">搜索音乐</string>
+    <string name="playlist">播放列表</string>
+    <string name="settings">设置</string>
+    <string name="switch_source">切换音源</string>
+    <string name="search_hint">输入歌曲名称搜索...</string>
 </resources>

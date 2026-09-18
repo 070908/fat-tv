@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 焦点态：金色边框 -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_input"/>
+            <corners android:radius="@dimen/search_input_corner"/>
+            <stroke android:width="@dimen/focus_border_width" android:color="@color/focus_border"/>
+        </shape>
+    </item>
+    <!-- 普通态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_input"/>
+            <corners android:radius="@dimen/search_input_corner"/>
+            <stroke android:width="1dp" android:color="@color/card_border"/>
+        </shape>
+    </item>
+</selector>

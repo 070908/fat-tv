@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ==================== 安全区与基础间距 ==================== -->
+    <!-- TV 安全边距（防止被电视裁切） -->
+    <dimen name="tv_safe_margin">48dp</dimen>
+    <!-- 基础间距单位 -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">48dp</dimen>
+    <dimen name="spacing_xxxl">64dp</dimen>
+
+    <!-- ==================== 字体层级（TV 10英尺距离） ==================== -->
+    <!-- 品牌/App 名称 -->
+    <dimen name="text_brand">52sp</dimen>
+    <!-- 页面大标题 -->
+    <dimen name="text_display">42sp</dimen>
+    <!-- 页面标题 / 歌曲名 -->
+    <dimen name="text_title">32sp</dimen>
+    <!-- 卡片标题 / 按钮文字 -->
+    <dimen name="text_headline">22sp</dimen>
+    <!-- 列表主文字 / 输入文字 -->
+    <dimen name="text_body">20sp</dimen>
+    <!-- 列表次文字 / 辅助信息 -->
+    <dimen name="text_caption">16sp</dimen>
+    <!-- 标签 / 时长 / 最小可读 -->
+    <dimen name="text_small">14sp</dimen>
+    <!-- 极小标签（谨慎使用） -->
+    <dimen name="text_tiny">12sp</dimen>
+
+    <!-- ==================== 首页卡片尺寸 ==================== -->
+    <dimen name="home_card_width">200dp</dimen>
+    <dimen name="home_card_height">160dp</dimen>
+    <dimen name="home_card_corner">12dp</dimen>
+    <dimen name="home_card_icon">56dp</dimen>
+    <dimen name="home_card_spacing">24dp</dimen>
+    <dimen name="home_card_elevation_normal">0dp</dimen>
+    <dimen name="home_card_elevation_focused">12dp</dimen>
+
+    <!-- ==================== 搜索页 ==================== -->
+    <dimen name="search_input_height">64dp</dimen>
+    <dimen name="search_input_corner">8dp</dimen>
+    <dimen name="search_input_padding">16dp</dimen>
+    <dimen name="search_result_margin_top">24dp</dimen>
+
+    <!-- ==================== 歌曲列表项 ==================== -->
+    <dimen name="song_item_height">120dp</dimen>
+    <dimen name="song_item_corner">8dp</dimen>
+    <dimen name="song_item_padding">16dp</dimen>
+    <dimen name="song_cover_size">88dp</dimen>
+    <dimen name="song_cover_corner">6dp</dimen>
+    <dimen name="song_item_spacing">12dp</dimen>
+
+    <!-- ==================== 播放页 ==================== -->
+    <dimen name="player_cover_size">280dp</dimen>
+    <dimen name="player_cover_corner">16dp</dimen>
+    <dimen name="player_control_btn_small">72dp</dimen>
+    <dimen name="player_control_btn_large">96dp</dimen>
+    <dimen name="player_control_spacing">48dp</dimen>
+    <dimen name="player_progress_height">6dp</dimen>
+    <dimen name="player_progress_corner">3dp</dimen>
+    <dimen name="player_lyric_height">160dp</dimen>
+
+    <!-- ==================== 焦点动效 ==================== -->
+    <!-- 焦点放大倍率（以百分比表示，100 = 1.0x） -->
+    <integer name="focus_scale_percent">115</integer>
+    <!-- 焦点动画时长 ms -->
+    <integer name="focus_anim_duration">200</integer>
+    <!-- 焦点边框宽度 -->
+    <dimen name="focus_border_width">3dp</dimen>
+    <!-- 焦点外发光半径 -->
+    <dimen name="focus_glow_radius">8dp</dimen>
+    <!-- 焦点圆角 -->
+    <dimen name="focus_corner_radius">12dp</dimen>
+
+    <!-- ==================== 通用元素 ==================== -->
+    <dimen name="icon_size_sm">32dp</dimen>
+    <dimen name="icon_size_md">48dp</dimen>
+    <dimen name="icon_size_lg">64dp</dimen>
+    <dimen name="icon_size_xl">80dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="logo_size">120dp</dimen>
+</resources>

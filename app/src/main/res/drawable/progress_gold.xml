@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 轨道（未完成部分） -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/progress_track" />
+            <corners android:radius="@dimen/player_progress_corner" />
+        </shape>
+    </item>
+    <!-- 缓冲进度 -->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="@color/accent_border" />
+                <corners android:radius="@dimen/player_progress_corner" />
+            </shape>
+        </clip>
+    </item>
+    <!-- 实际进度（金色） -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="@color/accent_progress" />
+                <corners android:radius="@dimen/player_progress_corner" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

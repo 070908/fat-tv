@@ -73,8 +73,13 @@ public class SettingsActivity extends AppCompatActivity {
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
         view.setOnFocusChangeListener((v, hasFocus) -> {
-            v.setScaleX(hasFocus ? 1.05f : 1.0f);
-            v.setScaleY(hasFocus ? 1.05f : 1.0f);
+            float scale = hasFocus ? 1.15f : 1.0f;
+            v.animate()
+                .scaleX(scale)
+                .scaleY(scale)
+                .setDuration(200)
+                .start();
+            v.setAlpha(hasFocus ? 1.0f : 0.7f);
         });
     }
 }
