@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/tv_safe_margin">
+
+    <!-- 每日推荐横幅区（类似 algerkong 的每日推荐大卡片） -->
+    <FrameLayout
+        android:id="@+id/banner_daily"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginBottom="@dimen/spacing_lg"
+        android:background="@drawable/card_home_focusable"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\u6bcf\u65e5\u63a8\u8350"
+                android:textSize="@dimen/text_display"
+                android:textColor="@color/text_accent"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\u6839\u636e\u60a8\u7684\u504f\u597d\u63a8\u8350\u97f3\u4e50"
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="@dimen/spacing_sm" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- 快捷入口行 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/spacing_lg">
+
+        <FrameLayout
+            android:id="@+id/btn_quick_search"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_home_focusable"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginEnd="@dimen/spacing_md">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="\u641c\u7d22\u97f3\u4e50"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_primary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_quick_playlist"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_home_focusable"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginEnd="@dimen/spacing_md">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="\u6211\u7684\u6b4c\u5355"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_primary" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_quick_settings"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_home_focusable"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="\u8bbe\u7f6e"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_primary" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- 最近播放标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u6700\u8fd1\u64ad\u653e"
+        android:textSize="@dimen/text_headline"
+        android:textColor="@color/text_accent"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_md" />
+
+    <!-- 最近播放横向滚动列表（2 列网格） -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false" />
+
+    <!-- 空态提示 -->
+    <TextView
+        android:id="@+id/tv_empty_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u6682\u65e0\u64ad\u653e\u8bb0\u5f55\uff0c\u8bf7\u5148\u641c\u7d22\u64ad\u653e\u97f3\u4e50"
+        android:textSize="@dimen/text_body"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+</LinearLayout>

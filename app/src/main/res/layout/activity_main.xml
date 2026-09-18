@@ -4,180 +4,152 @@
     android:layout_height="match_parent"
     android:background="@color/bg_primary">
 
-    <!-- 海绵宝宝背景图（保留不变，alpha 0.35 透出黑底） -->
+    <!-- 全局背景：黑金海绵宝宝图（alpha 0.35，透出黑底） -->
     <ImageView
-        android:id="@+id/bg_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:alpha="0.35"
         android:src="@drawable/bg_main" />
 
-    <!-- 内容区 -->
+    <!-- 全局暗色遮罩，确保文字可读 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_overlay" />
+
+    <!-- 主内容：顶部导航栏 + Fragment 容器 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/tv_safe_margin"
-        android:gravity="center_horizontal">
+        android:orientation="vertical">
 
-        <!-- 品牌名 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="fat TV"
-            android:textSize="@dimen/text_brand"
-            android:textColor="@color/text_accent"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/spacing_xxxl" />
-
-        <!-- 2x2 功能卡片网格 -->
+        <!-- 顶部导航栏（Tab 栏） -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/nav_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/tv_safe_margin"
+            android:paddingEnd="@dimen/tv_safe_margin"
+            android:paddingTop="16dp"
+            android:paddingBottom="12dp"
+            android:background="@color/bg_surface">
 
-            <!-- 第一行：搜索 + 播放列表 -->
-            <LinearLayout
+            <!-- fat TV Logo/品牌 -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="fat TV"
+                android:textSize="@dimen/text_brand"
+                android:textColor="@color/text_accent"
+                android:textStyle="bold"
+                android:layout_marginEnd="48dp" />
 
-                <!-- 搜索 -->
-                <FrameLayout
-                    android:id="@+id/btn_search"
-                    android:layout_width="@dimen/home_card_width"
-                    android:layout_height="@dimen/home_card_height"
-                    android:background="@drawable/card_home_focusable"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:clickable="true"
-                    android:nextFocusRight="@id/btn_playlist"
-                    android:nextFocusDown="@id/btn_settings">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="@dimen/home_card_icon"
-                            android:layout_height="@dimen/home_card_icon"
-                            android:src="@drawable/ic_search"
-                            android:layout_marginBottom="@dimen/spacing_sm" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/search_music"
-                            android:textSize="@dimen/text_headline"
-                            android:textColor="@color/text_primary" />
-                    </LinearLayout>
-                </FrameLayout>
-
-                <!-- 播放列表 -->
-                <FrameLayout
-                    android:id="@+id/btn_playlist"
-                    android:layout_width="@dimen/home_card_width"
-                    android:layout_height="@dimen/home_card_height"
-                    android:layout_marginStart="@dimen/home_card_spacing"
-                    android:background="@drawable/card_home_focusable"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:clickable="true"
-                    android:nextFocusLeft="@id/btn_search"
-                    android:nextFocusDown="@id/btn_source_switch">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="@dimen/home_card_icon"
-                            android:layout_height="@dimen/home_card_icon"
-                            android:src="@drawable/ic_playlist"
-                            android:layout_marginBottom="@dimen/spacing_sm" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/playlist"
-                            android:textSize="@dimen/text_headline"
-                            android:textColor="@color/text_primary" />
-                    </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-
-            <!-- 第二行：设置 + 切换音源 -->
-            <LinearLayout
+            <!-- Tab 按钮：首页 -->
+            <TextView
+                android:id="@+id/tab_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/home_card_spacing">
+                android:text="@string/tab_home"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_primary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector" />
 
-                <!-- 设置 -->
-                <FrameLayout
-                    android:id="@+id/btn_settings"
-                    android:layout_width="@dimen/home_card_width"
-                    android:layout_height="@dimen/home_card_height"
-                    android:background="@drawable/card_home_focusable"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:clickable="true"
-                    android:nextFocusRight="@id/btn_source_switch"
-                    android:nextFocusUp="@id/btn_search">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="@dimen/home_card_icon"
-                            android:layout_height="@dimen/home_card_icon"
-                            android:src="@drawable/ic_settings"
-                            android:layout_marginBottom="@dimen/spacing_sm" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings"
-                            android:textSize="@dimen/text_headline"
-                            android:textColor="@color/text_primary" />
-                    </LinearLayout>
-                </FrameLayout>
+            <!-- Tab 按钮：歌单 -->
+            <TextView
+                android:id="@+id/tab_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_playlist"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="16dp" />
 
-                <!-- 切换音源 -->
-                <FrameLayout
-                    android:id="@+id/btn_source_switch"
-                    android:layout_width="@dimen/home_card_width"
-                    android:layout_height="@dimen/home_card_height"
-                    android:layout_marginStart="@dimen/home_card_spacing"
-                    android:background="@drawable/card_home_focusable"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:clickable="true"
-                    android:nextFocusLeft="@id/btn_settings"
-                    android:nextFocusUp="@id/btn_playlist">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="@dimen/home_card_icon"
-                            android:layout_height="@dimen/home_card_icon"
-                            android:src="@drawable/ic_source"
-                            android:layout_marginBottom="@dimen/spacing_sm" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/switch_source"
-                            android:textSize="@dimen/text_headline"
-                            android:textColor="@color/text_primary" />
-                    </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
+            <!-- Tab 按钮：专辑 -->
+            <TextView
+                android:id="@+id/tab_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_album"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="16dp" />
+
+            <!-- Tab 按钮：排行榜 -->
+            <TextView
+                android:id="@+id/tab_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_rank"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="16dp" />
+
+            <!-- Tab 按钮：MV -->
+            <TextView
+                android:id="@+id/tab_mv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_mv"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="16dp" />
+
+            <!-- Tab 按钮：本地音乐 -->
+            <TextView
+                android:id="@+id/tab_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_local"
+                android:textSize="@dimen/text_headline"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="16dp" />
+
         </LinearLayout>
+
+        <!-- Fragment 内容容器 -->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
     </LinearLayout>
 </FrameLayout>

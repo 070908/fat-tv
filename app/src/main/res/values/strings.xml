@@ -5,4 +5,20 @@
     <string name="settings">设置</string>
     <string name="switch_source">切换音源</string>
     <string name="search_hint">输入歌曲名称搜索...</string>
+    <!-- 顶部导航栏 Tab 名称 -->
+    <string name="tab_home">首页</string>
+    <string name="tab_playlist">歌单</string>
+    <string name="tab_album">专辑</string>
+    <string name="tab_rank">排行榜</string>
+    <string name="tab_mv">MV</string>
+    <string name="tab_local">本地音乐</string>
+    <!-- 功能页面标题 -->
+    <string name="page_album">精选专辑</string>
+    <string name="page_rank">音乐排行榜</string>
+    <string name="page_mv">高清MV</string>
+    <string name="page_local">本地音乐</string>
+    <string name="page_playlist">我的歌单</string>
+    <!-- 通用提示 -->
+    <string name="empty_default">暂无内容</string>
+    <string name="coming_soon">即将上线，敬请期待</string>
 </resources>
