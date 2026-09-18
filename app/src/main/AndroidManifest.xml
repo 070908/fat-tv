@@ -45,6 +45,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.SettingsActivity"
+            android:exported="true"
             android:screenOrientation="landscape" />
 
         <service
