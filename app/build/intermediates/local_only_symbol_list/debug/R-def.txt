@@ -1,0 +1,33 @@
+R_DEF: Internal format may change without notice
+local
+drawable bg_main
+drawable btn_focusable
+drawable ic_logo
+drawable item_focusable
+id bg_image
+id btn_next
+id btn_play_pause
+id btn_playlist
+id btn_prev
+id btn_save
+id btn_search
+id btn_settings
+id btn_source_switch
+id et_local_url
+id et_plugin_url
+id et_search
+id iv_cover
+id rb_local
+id rb_public
+id rg_source
+id rv_results
+id tv_artist
+id tv_title
+layout activity_main
+layout activity_player
+layout activity_search
+layout activity_settings
+layout item_song
+mipmap ic_launcher
+string app_name
+style Theme.fatTV

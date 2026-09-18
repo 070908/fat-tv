@@ -83,7 +83,7 @@ public class JSRuntime {
 
             // 预置工具函数: JSON 原生已存在; 补充 Promise polyfill 简化
             rhino.evaluateString(globalScope,
-                    "var console = { log: function(...args) { __fattv_native__.log('info', args.join(' ')); } };",
+                    "var console = { log: function() { __fattv_native__.log('info', Array.prototype.slice.call(arguments).join(' ')); } };",
                     "<console-polyfill>", 1, null);
 
             initialized = true;
@@ -147,10 +147,9 @@ public class JSRuntime {
      */
     @SuppressWarnings("unchecked")
     public synchronized List<Song> search(String keyword, int page) {
-        Object result = callScriptMethod("search", keyword, page, 20);
-        if (result == null) return null;
+        String json = invokeJSReturningJson("search", keyword, page, 20);
+        if (json == null) return null;
         try {
-            String json = toJsonString(result);
             JSONArray arr = new JSONArray(json);
             List<Song> list = new ArrayList<>();
             for (int i = 0; i < arr.length(); i++) {
@@ -179,10 +178,9 @@ public class JSRuntime {
      * @return 播放 URL，失败返回 null
      */
     public synchronized String resolveUrl(String songId, String quality) {
-        Object result = callScriptMethod("resolveUrl", songId, quality);
-        if (result == null) return null;
+        String json = invokeJSReturningJson("resolveUrl", songId, quality);
+        if (json == null) return null;
         try {
-            String json = toJsonString(result);
             JSONObject o = new JSONObject(json);
             return o.optString("url", null);
         } catch (Exception e) {
@@ -197,10 +195,9 @@ public class JSRuntime {
      * @return LRC 格式歌词，失败返回 null
      */
     public synchronized String getLyric(String songId) {
-        Object result = callScriptMethod("getLyric", songId);
-        if (result == null) return null;
+        String json = invokeJSReturningJson("getLyric", songId);
+        if (json == null) return null;
         try {
-            String json = toJsonString(result);
             JSONObject o = new JSONObject(json);
             return o.optString("lrc", o.optString("lyric", null));
         } catch (Exception e) {
@@ -238,10 +235,21 @@ public class JSRuntime {
 
     // ============== Private helpers ==============
 
-    private Object callScriptMethod(String methodName, Object... args) {
+    /**
+     * 在当前线程安全的 Rhino Context 中调用 JS 方法并序列化结果为 JSON。
+     * Rhino 的 Context 绑定线程：若调用线程没有 Context 则临时 enter，调用完 exit，
+     * 且序列化必须在同一 Context 内完成（否则后台线程会抛 No Context 异常）。
+     */
+    private String invokeJSReturningJson(String methodName, Object... args) {
         if (!initialized) {
             Log.e(TAG, "Engine not initialized");
             return null;
+        }
+        boolean entered = false;
+        org.mozilla.javascript.Context cx = org.mozilla.javascript.Context.getCurrentContext();
+        if (cx == null) {
+            cx = org.mozilla.javascript.Context.enter();
+            entered = true;
         }
         try {
             Object moduleObj = globalScope.get("module", globalScope);
@@ -262,10 +270,17 @@ public class JSRuntime {
                 return null;
             }
             Function fn = (Function) fnObj;
-            return fn.call(rhino, globalScope, exports, wrapArgs(args));
+            Object result = fn.call(cx, globalScope, exports, wrapArgs(args));
+            if (result == null || result instanceof Undefined) return null;
+            Object json = NativeJSON.stringify(cx, globalScope, result, null, null);
+            return json != null ? json.toString() : null;
         } catch (Exception e) {
             Log.e(TAG, "Call method failed: " + methodName, e);
             return null;
+        } finally {
+            if (entered) {
+                org.mozilla.javascript.Context.exit();
+            }
         }
     }
 
@@ -275,12 +290,6 @@ public class JSRuntime {
             wrapped[i] = org.mozilla.javascript.Context.javaToJS(args[i], globalScope);
         }
         return wrapped;
-    }
-
-    private String toJsonString(Object obj) {
-        if (obj instanceof Undefined || obj == null) return "null";
-        Object json = NativeJSON.stringify(rhino, globalScope, obj, null, null);
-        return json != null ? json.toString() : "null";
     }
 
     private static String readStream(InputStream is) throws IOException {

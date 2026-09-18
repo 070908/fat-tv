@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#CC000000"
+    android:padding="32dp">
+
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="\u8f93\u5165\u6b4c\u66f2\u540d\u79f0\u641c\u7d22..."
+        android:textColor="#FFFFFF"
+        android:textColorHint="#888888"
+        android:textSize="22sp"
+        android:background="@drawable/btn_focusable"
+        android:padding="12dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
