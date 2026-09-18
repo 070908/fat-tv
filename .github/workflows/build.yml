@@ -50,16 +50,11 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Generate Gradle Wrapper
+      - name: Fix gradlew line endings & build
         run: |
-          # 若仓库未提交 gradlew，使用系统 Gradle 生成
-          if [ ! -f ./gradlew ]; then
-            gradle wrapper --gradle-version 8.2
-            chmod +x ./gradlew
-          fi
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+          sed -i 's/\r$//' gradlew
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
