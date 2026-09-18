@@ -35,7 +35,8 @@ public class SourceManager {
         String localUrl = prefs.getString(KEY_LOCAL_URL, "http://192.168.1.100:8090");
         String pluginUrl = prefs.getString(KEY_PUBLIC_PLUGIN, "");
 
-        // 注册所有音源
+        // 注册所有音源（避免重复注册：清空后再添加）
+        providers.clear();
         PublicSourceAdapter publicAdapter = new PublicSourceAdapter(pluginUrl);
         publicAdapter.init(context);
         providers.add(publicAdapter);
