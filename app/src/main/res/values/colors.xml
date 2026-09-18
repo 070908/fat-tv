@@ -3,14 +3,14 @@
     <!-- ==================== 背景色 ==================== -->
     <!-- 主背景：纯黑，让海绵宝宝背景图充分展现 -->
     <color name="bg_primary">#000000</color>
-    <!-- 卡片/面板背景：半透黑，隐约透出背景图 -->
-    <color name="bg_surface">#CC000000</color>
-    <color name="bg_surface_light">#E6000000</color>
+    <!-- 卡片/面板背景：更透明黑，让海绵宝宝背景充分透出 -->
+    <color name="bg_surface">#44000000</color>
+    <color name="bg_surface_light">#33000000</color>
     <!-- 输入框背景 -->
     <color name="bg_input">#66000000</color>
-    <!-- 遮罩 -->
-    <color name="bg_overlay">#99000000</color>
-    <color name="bg_overlay_light">#66000000</color>
+    <!-- 遮罩：极轻，几乎不遮挡背景 -->
+    <color name="bg_overlay">#22000000</color>
+    <color name="bg_overlay_light">#11000000</color>
 
     <!-- ==================== 强调色（金色系，呼应海绵宝宝） ==================== -->
     <!-- 主品牌色：亮金黄 -->

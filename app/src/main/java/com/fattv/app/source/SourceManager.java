@@ -15,6 +15,9 @@ public class SourceManager {
     private static final String KEY_SOURCE_TYPE = "source_type";
     private static final String KEY_LOCAL_URL = "local_server_url";
     private static final String KEY_PUBLIC_PLUGIN = "public_plugin_url";
+    private static final String KEY_PROXY_TYPE = "proxy_type";
+    private static final String KEY_PROXY_HOST = "proxy_host";
+    private static final String KEY_PROXY_PORT = "proxy_port";
 
     private static SourceManager instance;
     private final List<SourceProvider> providers = new ArrayList<>();
@@ -57,8 +60,52 @@ public class SourceManager {
         }
     }
 
-    public SourceProvider getCurrentProvider() {
+public SourceProvider getCurrentProvider() {
         return currentProvider;
+    }
+
+    /**
+     * 按类型查找音源提供者（与 Song.sourceType 配套，用于跨源搜索结果解析播放地址）
+     */
+    public SourceProvider getProviderByType(SourceProvider.SourceType type) {
+        for (SourceProvider p : providers) {
+            if (p.getType() == type) return p;
+        }
+        return currentProvider;
+    }
+
+    /**
+     * 多源聚合搜索：并发查询所有健康音源并合并结果，标注来源名称。
+     * 供搜索页使用——第三方公网音源 + 局域网后端同时出结果。
+     */
+    public List<Song> searchAll(String keyword, int page) {
+        List<Song> merged = new ArrayList<>();
+        List<Thread> workers = new ArrayList<>();
+        final Object lock = new Object();
+
+        for (final SourceProvider p : providers) {
+            if (!p.isHealthy()) continue;
+            Thread t = new Thread(() -> {
+                try {
+                    List<Song> songs = p.search(keyword, page);
+                    synchronized (lock) {
+                        for (Song s : songs) {
+                            if (s.sourceType == null) s.sourceType = p.getType();
+                            if (s.sourceName == null || s.sourceName.isEmpty()) s.sourceName = p.getName();
+                            merged.add(s);
+                        }
+                    }
+                } catch (Exception ignored) {
+                    // 单个源失败不阻塞其他源
+                }
+            });
+            t.start();
+            workers.add(t);
+        }
+        for (Thread t : workers) {
+            try { t.join(); } catch (InterruptedException ignored) {}
+        }
+        return merged;
     }
 
     public List<SourceProvider> getAllProviders() {
@@ -129,5 +176,32 @@ public class SourceManager {
         if (context == null) return "";
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getString(KEY_PUBLIC_PLUGIN, "");
+    }
+
+    // ===== 代理配置 =====
+    public void setProxyConfig(String type, String host, String port) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        editor.putString(KEY_PROXY_TYPE, type);
+        editor.putString(KEY_PROXY_HOST, host);
+        editor.putString(KEY_PROXY_PORT, port);
+        editor.apply();
+    }
+
+    public String getProxyType() {
+        if (context == null) return "HTTP";
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_PROXY_TYPE, "HTTP");
+    }
+
+    public String getProxyHost() {
+        if (context == null) return "";
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_PROXY_HOST, "");
+    }
+
+    public String getProxyPort() {
+        if (context == null) return "";
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_PROXY_PORT, "");
     }
 }

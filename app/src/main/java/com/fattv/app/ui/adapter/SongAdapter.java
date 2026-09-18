@@ -47,6 +47,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.tvArtist.setText(song.artist);
         holder.tvAlbum.setText(song.album != null ? song.album : "");
         holder.tvDuration.setText(formatDuration(song.duration));
+        holder.tvSource.setText(song.sourceName != null ? song.sourceName : "");
 
         // 加载封面图
         if (song.coverUrl != null && !song.coverUrl.isEmpty()) {
@@ -92,7 +93,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCover;
-        TextView tvTitle, tvArtist, tvAlbum, tvDuration;
+        TextView tvTitle, tvArtist, tvAlbum, tvDuration, tvSource;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -101,6 +102,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             tvArtist = itemView.findViewById(R.id.tv_artist);
             tvAlbum = itemView.findViewById(R.id.tv_album);
             tvDuration = itemView.findViewById(R.id.tv_duration);
+            tvSource = itemView.findViewById(R.id.tv_source);
         }
     }
 }

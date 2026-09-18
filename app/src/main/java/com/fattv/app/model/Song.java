@@ -12,8 +12,9 @@ public class Song implements Serializable {
     public String artist;
     public String album;
     public String coverUrl;
-    public long duration; // ms
+public long duration; // ms
     public SourceProvider.SourceType sourceType;
+    public String sourceName; // 来源展示名：网易云音乐 / 局域网音源
 
     @Override
     public String toString() {

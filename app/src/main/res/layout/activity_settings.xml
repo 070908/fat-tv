@@ -1,105 +1,345 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_overlay"
-    android:padding="@dimen/tv_safe_margin">
+    android:background="@color/bg_primary">
 
+    <!-- 全局背景层（海绵宝宝，透出） -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.45"
+        android:src="@drawable/bg_main" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_overlay_light" />
+
+    <!-- 主内容区 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/tv_safe_margin">
 
+        <!-- 标题 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="\u97f3\u6e90\u8bbe\u7f6e"
+            android:text="设置"
             android:textSize="@dimen/text_display"
             android:textColor="@color/text_accent"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/spacing_lg" />
 
-        <RadioGroup
-            android:id="@+id/rg_source"
+        <!-- 顶部 Tab 栏：音源选择 | 落雪音源 | 自定义API -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="@dimen/spacing_lg">
 
-            <RadioButton
-                android:id="@+id/rb_public"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\u516c\u7f51\u97f3\u6e90"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_body"
-                android:checked="true" />
-
-            <RadioButton
-                android:id="@+id/rb_local"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\u5c40\u57df\u7f51\u540e\u7aef"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_body"
-                android:layout_marginStart="32dp" />
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\u5c40\u57df\u7f51\u540e\u7aef\u5730\u5740"
-            android:textSize="@dimen/text_body"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="@dimen/spacing_sm" />
-
-        <EditText
-            android:id="@+id/et_local_url"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="http://192.168.1.100:8090"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_hint"
-            android:textSize="@dimen/text_caption"
-            android:background="@drawable/input_focusable"
-            android:padding="@dimen/spacing_md"
-            android:layout_marginBottom="@dimen/spacing_lg" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\u7b2c\u4e09\u65b9\u97f3\u6e90\u63d2\u4ef6\u5730\u5740"
-            android:textSize="@dimen/text_body"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="@dimen/spacing_sm" />
-
-        <EditText
-            android:id="@+id/et_plugin_url"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="\u8f93\u5165\u97f3\u6e90\u63d2\u4ef6 URL"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_hint"
-            android:textSize="@dimen/text_caption"
-            android:background="@drawable/input_focusable"
-            android:padding="@dimen/spacing_md"
-            android:layout_marginBottom="@dimen/spacing_xl" />
-
-<FrameLayout
-            android:id="@+id/btn_save"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:background="@drawable/card_home_focusable"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_gravity="center">
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tab_source_select"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="\u4fdd\u5b58\u8bbe\u7f6e"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_headline"
-                android:layout_gravity="center" />
+                android:layout_weight="1"
+                android:text="音源选择"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/text_accent"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector" />
+
+            <TextView
+                android:id="@+id/tab_lx_source"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="落雪音源"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/text_secondary"
+                android:padding="12dp"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tab_custom_api"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="自定义API"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/text_secondary"
+                android:padding="12dp"
+                android:gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/tab_selector"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+        <!-- 内容容器 -->
+        <FrameLayout
+            android:id="@+id/settings_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/bg_surface_light"
+            android:padding="@dimen/spacing_lg">
+
+            <!-- Tab 1: 音源选择 -->
+            <LinearLayout
+                android:id="@+id/panel_source_select"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择音乐解析使用的音源平台"
+                    android:textSize="@dimen/text_caption"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <RadioGroup
+                    android:id="@+id/rg_source"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/spacing_lg">
+
+                    <RadioButton
+                        android:id="@+id/rb_public"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="网易云音乐（公网）"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:checked="true"
+                        android:buttonTint="@color/accent"
+                        android:layout_marginBottom="@dimen/spacing_sm" />
+
+                    <RadioButton
+                        android:id="@+id/rb_local"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="局域网后端"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:buttonTint="@color/accent"
+                        android:layout_marginBottom="@dimen/spacing_sm" />
+                </RadioGroup>
+
+                <!-- 代理设置区 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="网络代理设置"
+                    android:textSize="@dimen/text_title"
+                    android:textColor="@color/text_accent"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="代理类型"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_sm" />
+
+                <EditText
+                    android:id="@+id/et_proxy_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:hint="HTTP"
+                    android:text="HTTP"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="@dimen/text_body"
+                    android:background="@drawable/input_focusable"
+                    android:padding="@dimen/spacing_md"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="代理地址"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_sm" />
+
+                <EditText
+                    android:id="@+id/et_proxy_host"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:hint="127.0.0.1"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="@dimen/text_body"
+                    android:background="@drawable/input_focusable"
+                    android:padding="@dimen/spacing_md"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="代理端口"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_sm" />
+
+                <EditText
+                    android:id="@+id/et_proxy_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:hint="7890"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="@dimen/text_body"
+                    android:background="@drawable/input_focusable"
+                    android:padding="@dimen/spacing_md"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
+
+            </LinearLayout>
+
+            <!-- Tab 2: 落雪音源（占位） -->
+            <LinearLayout
+                android:id="@+id/panel_lx_source"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="落雪音源导入"
+                    android:textSize="@dimen/text_title"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请输入落雪音源脚本 URL 进行在线导入"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
+
+                <EditText
+                    android:id="@+id/et_lx_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:hint="输入落雪音源脚本 URL"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="@dimen/text_body"
+                    android:background="@drawable/input_focusable"
+                    android:padding="@dimen/spacing_md"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
+
+            </LinearLayout>
+
+            <!-- Tab 3: 自定义API（占位） -->
+            <LinearLayout
+                android:id="@+id/panel_custom_api"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="自定义 API 设置"
+                    android:textSize="@dimen/text_title"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="@dimen/spacing_md" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="导入兼容的自定义 API 插件以扩展音源"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
+
+                <EditText
+                    android:id="@+id/et_custom_api_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:hint="输入 JSON 配置 URL"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="@dimen/text_body"
+                    android:background="@drawable/input_focusable"
+                    android:padding="@dimen/spacing_md"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
+
+            </LinearLayout>
+
         </FrameLayout>
+
+        <!-- 底部按钮区 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="@dimen/spacing_lg">
+
+            <FrameLayout
+                android:id="@+id/btn_cancel"
+                android:layout_width="160dp"
+                android:layout_height="56dp"
+                android:background="@drawable/card_home_focusable"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="取消"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_primary"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_save"
+                android:layout_width="160dp"
+                android:layout_height="56dp"
+                android:background="@drawable/card_home_focusable"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_marginStart="@dimen/spacing_md">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="确认"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_accent"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+        </LinearLayout>
+
     </LinearLayout>
-</ScrollView>
+</FrameLayout>

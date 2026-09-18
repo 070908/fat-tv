@@ -21,6 +21,7 @@ import androidx.media3.session.MediaSessionService;
 import com.fattv.app.R;
 import com.fattv.app.model.Song;
 import com.fattv.app.source.SourceManager;
+import com.fattv.app.source.SourceProvider;
 import com.fattv.app.ui.PlayerActivity;
 
 import java.util.ArrayList;
@@ -97,7 +98,9 @@ public class MusicPlaybackService extends MediaSessionService {
         addToHistory(song);
         new Thread(() -> {
             try {
-                String url = SourceManager.getInstance().getCurrentProvider().resolveUrl(song);
+                // 跨源播放：按歌曲来源类型选择对应音源解析播放地址
+                SourceProvider provider = SourceManager.getInstance().getProviderByType(song.sourceType);
+                String url = provider.resolveUrl(song);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     player.setMediaItem(MediaItem.fromUri(url));
                     player.prepare();

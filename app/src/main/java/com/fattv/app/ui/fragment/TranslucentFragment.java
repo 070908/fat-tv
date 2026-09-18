@@ -27,35 +27,34 @@ public abstract class TranslucentFragment extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
-        // 全局背景层（海绵宝宝 bg_main，alpha 0.35）
+        // 全局背景层（海绵宝宝 bg_main，alpha 0.55——充分透出）
         View bgView = new View(requireContext());
         bgView.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         bgView.setBackgroundResource(R.drawable.bg_main);
-        bgView.setAlpha(0.35f);
+        bgView.setAlpha(0.55f);
         root.addView(bgView);
 
-        // 暗色遮罩，确保内容可读
+        // 极轻暗色遮罩，几乎不遮挡背景
         View overlay = new View(requireContext());
         overlay.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        overlay.setBackgroundColor(getResources().getColor(R.color.bg_overlay));
+        overlay.setBackgroundColor(getResources().getColor(R.color.bg_overlay_light));
         root.addView(overlay);
 
         // 半透明内容面板：子类实现 createContentView()
         View contentView = createContentView(inflater, container, savedInstanceState);
         if (contentView != null) {
-            // 内容区自动加半透明背景
-            contentView.setBackgroundResource(R.color.bg_surface);
-            // 子类布局如果已有背景会覆盖，这里主要是兜底
+            // 内容区背景：极轻半透明，充分透出底层背景
+            contentView.setBackgroundResource(R.color.bg_surface_light);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
             lp.setMargins(
                     getResources().getDimensionPixelSize(R.dimen.tv_safe_margin),
-                    getResources().getDimensionPixelSize(R.dimen.tv_safe_margin) + 120, // 顶部留出导航栏高度
+                    getResources().getDimensionPixelSize(R.dimen.tv_safe_margin) + 120,
                     getResources().getDimensionPixelSize(R.dimen.tv_safe_margin),
                     getResources().getDimensionPixelSize(R.dimen.tv_safe_margin)
             );
