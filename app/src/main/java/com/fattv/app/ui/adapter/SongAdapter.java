@@ -24,6 +24,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private final List<Song> songs;
     private final OnItemClickListener listener;
 
+    /** 与 CardAdapter 的 viewType 区分，避免同一 RecyclerView 切换适配器时 RecycledViewPool 复用错 ViewHolder */
+    private static final int VIEW_TYPE_SONG = 2;
+
     public interface OnItemClickListener {
         void onItemClick(Song song);
     }
@@ -31,6 +34,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     public SongAdapter(List<Song> songs, OnItemClickListener listener) {
         this.songs = songs;
         this.listener = listener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return VIEW_TYPE_SONG;
     }
 
     @NonNull

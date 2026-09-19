@@ -91,16 +91,21 @@
 
         </LinearLayout>
 
-        <!-- 内容容器 -->
-        <FrameLayout
-            android:id="@+id/settings_content"
+        <!-- 内容容器（可滚动，防止代理设置项过多被截断） -->
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/bg_surface_light"
-            android:padding="@dimen/spacing_lg">
+            android:fillViewport="true">
 
-            <!-- Tab 1: 音源选择 -->
+            <FrameLayout
+                android:id="@+id/settings_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_surface_light"
+                android:padding="@dimen/spacing_lg">
+
+                <!-- Tab 1: 音源选择 -->
             <LinearLayout
                 android:id="@+id/panel_source_select"
                 android:layout_width="match_parent"
@@ -114,35 +119,33 @@
                     android:text="选择音乐解析使用的音源平台"
                     android:textSize="@dimen/text_caption"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="@dimen/spacing_md" />
+                    android:layout_marginBottom="@dimen/spacing_sm" />
 
                 <RadioGroup
                     android:id="@+id/rg_source"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginBottom="@dimen/spacing_lg">
+                    android:layout_marginBottom="@dimen/spacing_md">
 
                     <RadioButton
                         android:id="@+id/rb_public"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="44dp"
                         android:text="网易云音乐（公网）"
                         android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_body"
                         android:checked="true"
-                        android:buttonTint="@color/accent"
-                        android:layout_marginBottom="@dimen/spacing_sm" />
+                        android:buttonTint="@color/accent" />
 
                     <RadioButton
                         android:id="@+id/rb_local"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="44dp"
                         android:text="局域网后端"
                         android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_body"
-                        android:buttonTint="@color/accent"
-                        android:layout_marginBottom="@dimen/spacing_sm" />
+                        android:buttonTint="@color/accent" />
                 </RadioGroup>
 
                 <!-- 代理设置区 -->
@@ -153,7 +156,7 @@
                     android:textSize="@dimen/text_title"
                     android:textColor="@color/text_accent"
                     android:textStyle="bold"
-                    android:layout_marginBottom="@dimen/spacing_md" />
+                    android:layout_marginBottom="@dimen/spacing_sm" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -161,7 +164,7 @@
                     android:text="代理类型"
                     android:textSize="@dimen/text_body"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="@dimen/spacing_sm" />
+                    android:layout_marginBottom="@dimen/spacing_xs" />
 
                 <EditText
                     android:id="@+id/et_proxy_type"
@@ -173,7 +176,8 @@
                     android:textColorHint="@color/text_hint"
                     android:textSize="@dimen/text_body"
                     android:background="@drawable/input_focusable"
-                    android:padding="@dimen/spacing_md"
+                    android:paddingHorizontal="@dimen/spacing_md"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="@dimen/spacing_md" />
 
                 <TextView
@@ -182,7 +186,7 @@
                     android:text="代理地址"
                     android:textSize="@dimen/text_body"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="@dimen/spacing_sm" />
+                    android:layout_marginBottom="@dimen/spacing_xs" />
 
                 <EditText
                     android:id="@+id/et_proxy_host"
@@ -193,7 +197,8 @@
                     android:textColorHint="@color/text_hint"
                     android:textSize="@dimen/text_body"
                     android:background="@drawable/input_focusable"
-                    android:padding="@dimen/spacing_md"
+                    android:paddingHorizontal="@dimen/spacing_md"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="@dimen/spacing_md" />
 
                 <TextView
@@ -202,7 +207,7 @@
                     android:text="代理端口"
                     android:textSize="@dimen/text_body"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="@dimen/spacing_sm" />
+                    android:layout_marginBottom="@dimen/spacing_xs" />
 
                 <EditText
                     android:id="@+id/et_proxy_port"
@@ -214,7 +219,8 @@
                     android:textColorHint="@color/text_hint"
                     android:textSize="@dimen/text_body"
                     android:background="@drawable/input_focusable"
-                    android:padding="@dimen/spacing_md"
+                    android:paddingHorizontal="@dimen/spacing_md"
+                    android:paddingVertical="8dp"
                     android:layout_marginBottom="@dimen/spacing_lg" />
 
             </LinearLayout>
@@ -297,7 +303,8 @@
 
             </LinearLayout>
 
-        </FrameLayout>
+            </FrameLayout>
+        </ScrollView>
 
         <!-- 底部按钮区 -->
         <LinearLayout

@@ -5,6 +5,9 @@ import android.content.Context;
 import com.fattv.app.jsengine.JSRuntime;
 import com.fattv.app.model.Song;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +65,149 @@ public class PublicSourceAdapter implements SourceProvider {
         if (jsRuntime == null) return new ArrayList<>();
         List<Song> result = jsRuntime.search(keyword, page);
         return result != null ? result : new ArrayList<>();
+    }
+
+    /**
+     * 获取热门排行榜歌曲（JS 脚本 getTopSongs）
+     */
+    public List<Song> getTopSongs(int limit) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getTopSongs", limit);
+        return parseSongArray(arr);
+    }
+
+    /**
+     * 获取热门专辑列表（JS 脚本 getTopAlbums）
+     */
+    public List<Song> getTopAlbums(int limit) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getTopAlbums", limit);
+        List<Song> list = new ArrayList<>();
+        if (arr == null) return list;
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject o = arr.getJSONObject(i);
+                Song s = new Song();
+                s.id = String.valueOf(o.optLong("id", 0));
+                s.title = o.optString("name", "");
+                s.album = o.optString("name", "");
+                s.artist = o.optString("artist", "");
+                s.coverUrl = o.optString("pic", "");
+                s.sourceType = SourceProvider.SourceType.PUBLIC;
+                list.add(s);
+            } catch (Exception ignored) {
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 获取热门 MV 列表（JS 脚本 getTopMvs）
+     */
+    public List<Song> getTopMvs(int limit) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getTopMvs", limit);
+        List<Song> list = new ArrayList<>();
+        if (arr == null) return list;
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject o = arr.getJSONObject(i);
+                Song s = new Song();
+                s.id = String.valueOf(o.optLong("id", 0));
+                s.title = o.optString("name", "");
+                s.artist = o.optString("artist", "");
+                s.coverUrl = o.optString("pic", o.optString("cover", ""));
+                s.duration = o.optLong("duration", 0);
+                s.sourceType = SourceProvider.SourceType.PUBLIC;
+                list.add(s);
+            } catch (Exception ignored) {
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 解析 MV 播放地址（JS 脚本 resolveMvUrl）
+     */
+    public String resolveMvUrl(String mvId) {
+        if (jsRuntime == null) return null;
+        try {
+            JSONObject o = jsRuntime.callObjectMethod("resolveMvUrl", mvId);
+            return o != null ? o.optString("url", null) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取精选歌单列表（JS 脚本 getTopPlaylists）
+     */
+    public List<Song> getTopPlaylists(int limit) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getTopPlaylists", limit);
+        List<Song> list = new ArrayList<>();
+        if (arr == null) return list;
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject o = arr.getJSONObject(i);
+                Song s = new Song();
+                s.id = String.valueOf(o.optLong("id", 0));
+                s.title = o.optString("name", "");
+                s.album = o.optString("name", "");
+                s.artist = o.optString("artist", "");
+                s.coverUrl = o.optString("pic", "");
+                s.sourceType = SourceProvider.SourceType.PUBLIC;
+                list.add(s);
+            } catch (Exception ignored) {
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 获取歌单内歌曲列表（JS 脚本 getPlaylistTracks）
+     */
+    public List<Song> getPlaylistTracks(String playlistId) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getPlaylistTracks", playlistId);
+        return parseSongArray(arr);
+    }
+
+    /**
+     * 获取专辑内歌曲列表（JS 脚本 getAlbumTracks，albumName 用于详情接口被风控时降级搜索）
+     */
+    public List<Song> getAlbumTracks(String albumId, String albumName) {
+        if (jsRuntime == null) return new ArrayList<>();
+        JSONArray arr = jsRuntime.callArrayMethod("getAlbumTracks", albumId, albumName);
+        return parseSongArray(arr);
+    }
+
+    /**
+     * 获取专辑内歌曲列表（JS 脚本 getAlbumTracks，单参兼容）
+     */
+    public List<Song> getAlbumTracks(String albumId) {
+        return getAlbumTracks(albumId, null);
+    }
+
+    private List<Song> parseSongArray(JSONArray arr) {
+        List<Song> list = new ArrayList<>();
+        if (arr == null) return list;
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject o = arr.getJSONObject(i);
+                Song s = new Song();
+                s.id = String.valueOf(o.optLong("id", 0));
+                s.title = o.optString("name", o.optString("title", ""));
+                s.artist = o.optString("artist", "");
+                s.album = o.optString("album", "");
+                s.coverUrl = o.optString("pic", o.optString("cover", ""));
+                s.duration = o.optLong("duration", 0);
+                s.sourceType = SourceProvider.SourceType.PUBLIC;
+                list.add(s);
+            } catch (Exception ignored) {
+            }
+        }
+        return list;
     }
 
     @Override

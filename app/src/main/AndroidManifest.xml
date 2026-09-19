@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- 本地音乐扫描：API 22-32 用 READ_EXTERNAL_STORAGE，API 33+ 用 READ_MEDIA_AUDIO -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <uses-feature
         android:name="android.software.leanback"
@@ -46,6 +51,9 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.MvPlayerActivity"
             android:screenOrientation="landscape" />
 
         <service

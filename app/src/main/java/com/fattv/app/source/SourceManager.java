@@ -19,9 +19,10 @@ public class SourceManager {
     private static final String KEY_PROXY_HOST = "proxy_host";
     private static final String KEY_PROXY_PORT = "proxy_port";
 
-    private static SourceManager instance;
+private static SourceManager instance;
     private final List<SourceProvider> providers = new ArrayList<>();
     private SourceProvider currentProvider;
+    private final LocalMediaSourceAdapter localMediaAdapter = new LocalMediaSourceAdapter();
     private Context context;
 
     private SourceManager() {}
@@ -68,6 +69,8 @@ public SourceProvider getCurrentProvider() {
      * 按类型查找音源提供者（与 Song.sourceType 配套，用于跨源搜索结果解析播放地址）
      */
     public SourceProvider getProviderByType(SourceProvider.SourceType type) {
+        // 本地媒体文件：独立适配器，不参与多源搜索与自动降级
+        if (type == SourceProvider.SourceType.LOCAL_MEDIA) return localMediaAdapter;
         for (SourceProvider p : providers) {
             if (p.getType() == type) return p;
         }

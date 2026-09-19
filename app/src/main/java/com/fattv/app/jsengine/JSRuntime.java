@@ -1,5 +1,6 @@
 package com.fattv.app.jsengine;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.fattv.app.model.Song;
@@ -18,12 +19,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.SecureRandom;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -75,6 +86,8 @@ public class JSRuntime {
             };
             bridge.put("http_get", bridge, new HttpGetCallable());
             bridge.put("http_post", bridge, new HttpPostCallable());
+            bridge.put("http_post_form", bridge, new HttpPostFormCallable());
+            bridge.put("weapi_sign", bridge, new WeapiSignCallable());
             bridge.put("log", bridge, new LogCallable());
             bridge.put("get_cache", bridge, new GetCacheCallable());
             bridge.put("set_cache", bridge, new SetCacheCallable());
@@ -202,6 +215,36 @@ public class JSRuntime {
             return o.optString("lrc", o.optString("lyric", null));
         } catch (Exception e) {
             Log.e(TAG, "Parse lyric result failed", e);
+            return null;
+        }
+    }
+
+    /**
+     * 调用 JS 脚本中返回 JSON 数组的方法（如 getTopSongs/getTopAlbums/getTopMvs）
+     * @return JSONArray，失败返回 null
+     */
+    public synchronized JSONArray callArrayMethod(String methodName, Object... args) {
+        String json = invokeJSReturningJson(methodName, args);
+        if (json == null) return null;
+        try {
+            return new JSONArray(json);
+        } catch (Exception e) {
+            Log.e(TAG, "Parse array result failed: " + methodName, e);
+            return null;
+        }
+    }
+
+    /**
+     * 调用 JS 脚本中返回 JSON 对象的方法（如 resolveMvUrl）
+     * @return JSONObject，失败返回 null
+     */
+    public synchronized JSONObject callObjectMethod(String methodName, Object... args) {
+        String json = invokeJSReturningJson(methodName, args);
+        if (json == null) return null;
+        try {
+            return new JSONObject(json);
+        } catch (Exception e) {
+            Log.e(TAG, "Parse object result failed: " + methodName, e);
             return null;
         }
     }
@@ -369,6 +412,108 @@ public class JSRuntime {
                 return "{\"error\":\"" + e.getMessage() + "\"}";
             }
         }
+    }
+
+    private class HttpPostFormCallable extends ScriptableObject implements Callable {
+        @Override public String getClassName() { return "HttpPostFormCallable"; }
+        @Override
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+            if (args.length < 2) return "";
+            String url = org.mozilla.javascript.Context.toString(args[0]);
+            String formBody = org.mozilla.javascript.Context.toString(args[1]);
+            String headersJson = args.length > 2 ? org.mozilla.javascript.Context.toString(args[2]) : "{}";
+            try {
+                okhttp3.MediaType FORM = okhttp3.MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
+                okhttp3.RequestBody reqBody = okhttp3.RequestBody.create(formBody, FORM);
+                Request.Builder req = new Request.Builder().url(url).post(reqBody);
+                if (!headersJson.isEmpty() && !headersJson.equals("{}")) {
+                    JSONObject h = new JSONObject(headersJson);
+                    for (java.util.Iterator<String> it = h.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        req.header(key, h.getString(key));
+                    }
+                }
+                Response resp = httpClient.newCall(req.build()).execute();
+                String respBody = resp.body() != null ? resp.body().string() : "";
+                JSONObject result = new JSONObject();
+                result.put("status", resp.code());
+                result.put("body", respBody);
+                return result.toString();
+            } catch (Exception e) {
+                Log.e(TAG, "http_post_form error: " + url, e);
+                return "{\"error\":\"" + e.getMessage() + "\"}";
+            }
+        }
+    }
+
+    /**
+     * 网易云 weapi 参数签名（AES-CBC 两轮 + RSA 加密随机 key）
+     * 入参 args[0] = JSON 字符串（待加密的请求参数），args[1] = 可选路径（仅用于日志）
+     * 返回 {"params": "...", "encSecKey": "..."} JSON 字符串
+     */
+    private class WeapiSignCallable extends ScriptableObject implements Callable {
+        @Override public String getClassName() { return "WeapiSignCallable"; }
+        @Override
+        public Object call(org.mozilla.javascript.Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+            if (args.length < 1) return "";
+            String paramsJson = org.mozilla.javascript.Context.toString(args[0]);
+            String pathTag = args.length > 1 ? org.mozilla.javascript.Context.toString(args[1]) : "";
+            try {
+                // 1. 第一轮 AES：固定密钥加密
+                byte[] once = aesEncrypt(paramsJson.getBytes("UTF-8"), WEAPI_FIXED_KEY, WEAPI_IV);
+                // 2. 随机 16 字节 AES key
+                byte[] randomKey = new byte[16];
+                new SecureRandom().nextBytes(randomKey);
+                // 3. 第二轮 AES：随机密钥加密
+                byte[] twice = aesEncrypt(once, randomKey, WEAPI_IV);
+                String params = android.util.Base64.encodeToString(twice, android.util.Base64.NO_WRAP);
+                // 4. RSA 加密随机 key -> encSecKey（hex）
+                String encSecKey = rsaEncryptHex(randomKey);
+                JSONObject out = new JSONObject();
+                out.put("params", params);
+                out.put("encSecKey", encSecKey);
+                if (!pathTag.isEmpty()) {
+                    Log.d(TAG, "weapi_sign(" + pathTag + ") params.len=" + params.length() + " key.len=" + encSecKey.length());
+                }
+                return out.toString();
+            } catch (Exception e) {
+                Log.e(TAG, "weapi_sign error", e);
+                return "{\"error\":\"" + e.getMessage() + "\"}";
+            }
+        }
+    }
+
+    // ============== weapi 加密常量与算法 ==============
+    private static final byte[] WEAPI_FIXED_KEY = "0CoJUm6Qyw8W8jud".getBytes();
+    private static final byte[] WEAPI_IV = "0102030405060708".getBytes();
+
+    private static byte[] aesEncrypt(byte[] data, byte[] key, byte[] iv) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+        return cipher.doFinal(data);
+    }
+
+    private static String rsaEncryptHex(byte[] data) throws Exception {
+        BigInteger modulus = new BigInteger(
+                "00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b72515"
+                        + "2b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ec"
+                        + "bda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d8"
+                        + "13cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7",
+                16);
+        BigInteger exponent = new BigInteger("010001", 16);
+        KeyFactory factory = KeyFactory.getInstance("RSA");
+        RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, exponent);
+        java.security.PublicKey pubKey = factory.generatePublic(spec);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+        byte[] encrypted = cipher.doFinal(data);
+        StringBuilder sb = new StringBuilder();
+        for (byte b : encrypted) {
+            sb.append(String.format("%02x", b & 0xff));
+        }
+        return sb.toString();
     }
 
     private class LogCallable extends ScriptableObject implements Callable {
