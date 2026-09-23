@@ -11,10 +11,15 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
 
@@ -79,7 +84,22 @@ public class MusicPlaybackService extends MediaSessionService {
         super.onCreate();
         createNotificationChannel();
 
-        player = new ExoPlayer.Builder(this).build();
+        // 网易云直链返回 302 重定向到 CDN，必须允许跨协议跳转，否则音频加载失败（无声）
+        DefaultHttpDataSource.Factory httpFactory = new DefaultHttpDataSource.Factory()
+            .setAllowCrossProtocolRedirects(true)
+            .setConnectTimeoutMs(15000)
+            .setReadTimeoutMs(15000);
+        DefaultDataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this, httpFactory);
+
+        player = new ExoPlayer.Builder(this)
+            .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
+            .setAudioAttributes(
+                new AudioAttributes.Builder()
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                    .setUsage(C.USAGE_MEDIA)
+                    .build(),
+                true)
+            .build();
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
 
         mediaSession = new MediaSession.Builder(this, player).build();
@@ -131,8 +151,8 @@ public class MusicPlaybackService extends MediaSessionService {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID, "fat TV \u64ad\u653e", NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID, "fatfat TVmusic \u64ad\u653e", NotificationManager.IMPORTANCE_LOW);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
         }
     }
@@ -141,7 +161,7 @@ public class MusicPlaybackService extends MediaSessionService {
         PendingIntent pi = PendingIntent.getActivity(this, 0,
             new Intent(this, PlayerActivity.class), PendingIntent.FLAG_IMMUTABLE);
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("fat TV")
+            .setContentTitle("fatfat TVmusic")
             .setContentText("\u6b63\u5728\u64ad\u653e\u97f3\u4e50...")
             .setSmallIcon(R.drawable.ic_logo)
             .setContentIntent(pi)
@@ -152,7 +172,7 @@ public class MusicPlaybackService extends MediaSessionService {
     private void updateNotification(String text) {
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(NOTIF_ID, new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("fat TV")
+            .setContentTitle("fatfat TVmusic")
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_logo)
             .setOngoing(true)

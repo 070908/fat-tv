@@ -18,8 +18,13 @@ import com.fattv.app.source.PublicSourceAdapter;
 import com.fattv.app.source.SourceManager;
 import com.fattv.app.source.SourceProvider;
 
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 
 /**
  * MvPlayerActivity - MV 视频播放页
@@ -31,6 +36,7 @@ public class MvPlayerActivity extends AppCompatActivity {
     private SurfaceView svVideo;
     private ProgressBar progressLoading;
     private ImageView btnBack;
+    private ImageView btnPlayPause;
     private TextView tvTitle, tvArtist;
     private Song mv;
 
@@ -42,6 +48,7 @@ public class MvPlayerActivity extends AppCompatActivity {
         svVideo = findViewById(R.id.sv_video);
         progressLoading = findViewById(R.id.progress_loading);
         btnBack = findViewById(R.id.btn_back);
+        btnPlayPause = findViewById(R.id.btn_mv_play_pause);
         tvTitle = findViewById(R.id.tv_title);
         tvArtist = findViewById(R.id.tv_artist);
 
@@ -61,7 +68,28 @@ public class MvPlayerActivity extends AppCompatActivity {
             v.animate().scaleX(scale).scaleY(scale).setDuration(150).start();
         });
 
-        player = new ExoPlayer.Builder(this).build();
+        btnPlayPause.setOnClickListener(v -> togglePlayPause());
+        btnPlayPause.setOnFocusChangeListener((v, hasFocus) -> {
+            float scale = hasFocus ? 1.2f : 1.0f;
+            v.animate().scaleX(scale).scaleY(scale).setDuration(150).start();
+        });
+
+        // 网易云 MV 直链同样返回 302 重定向，允许跨协议跳转
+        DefaultHttpDataSource.Factory httpFactory = new DefaultHttpDataSource.Factory()
+            .setAllowCrossProtocolRedirects(true)
+            .setConnectTimeoutMs(15000)
+            .setReadTimeoutMs(15000);
+        DefaultDataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this, httpFactory);
+
+        player = new ExoPlayer.Builder(this)
+            .setMediaSourceFactory(new DefaultMediaSourceFactory(dataSourceFactory))
+            .setAudioAttributes(
+                new AudioAttributes.Builder()
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                    .setUsage(C.USAGE_MEDIA)
+                    .build(),
+                true)
+            .build();
         svVideo.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -80,6 +108,15 @@ public class MvPlayerActivity extends AppCompatActivity {
         loadAndPlay();
     }
 
+    private void togglePlayPause() {
+        if (player == null) return;
+        if (player.getPlayWhenReady()) {
+            player.pause();
+        } else {
+            player.play();
+        }
+    }
+
     private void loadAndPlay() {
         progressLoading.setVisibility(View.VISIBLE);
         new Thread(() -> {
@@ -96,9 +133,15 @@ public class MvPlayerActivity extends AppCompatActivity {
                         Toast.makeText(this, "MV 地址获取失败，请检查网络或音源", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    player.setMediaItem(MediaItem.fromUri(finalUrl));
+player.setMediaItem(MediaItem.fromUri(finalUrl));
                     player.prepare();
-                    player.play();
+                    player.setPlayWhenReady(true);
+                    player.addListener(new androidx.media3.common.Player.Listener() {
+                        @Override
+                        public void onIsPlayingChanged(boolean isPlaying) {
+                            btnPlayPause.setImageResource(isPlaying ? R.drawable.ic_pause : R.drawable.ic_play);
+                        }
+                    });
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {

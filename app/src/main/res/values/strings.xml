@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">fat TV</string>
+    <string name="app_name">fatfat TVmusic</string>
     <string name="search_music">搜索音乐</string>
     <string name="playlist">播放列表</string>
     <string name="settings">设置</string>
@@ -7,11 +7,10 @@
     <string name="search_hint">输入歌曲名称搜索...</string>
     <!-- 顶部导航栏 Tab 名称 -->
     <string name="tab_home">首页</string>
-    <string name="tab_playlist">歌单</string>
-    <string name="tab_album">专辑</string>
+    <string name="tab_discover">发现</string>
     <string name="tab_rank">排行榜</string>
     <string name="tab_mv">MV</string>
-    <string name="tab_local">本地音乐</string>
+    <string name="tab_mine">我的</string>
     <!-- 功能页面标题 -->
     <string name="page_album">精选专辑</string>
     <string name="page_rank">音乐排行榜</string>
@@ -22,6 +21,8 @@
     <string name="empty_default">暂无内容</string>
     <string name="coming_soon">即将上线，敬请期待</string>
     <string name="loading">正在加载，请稍候...</string>
+    <string name="playlist_empty_history">暂无播放记录，请先在搜索页播放音乐</string>
+    <string name="playlist_load_failed">曲目加载失败，请检查网络或稍后重试</string>
     <string name="empty_rank">排行榜加载失败，请检查网络或稍后重试</string>
     <string name="empty_mv">MV 列表获取失败，请检查网络或稍后重试</string>
     <string name="empty_album_list">专辑列表获取失败，请检查网络或稍后重试</string>

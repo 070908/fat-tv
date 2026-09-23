@@ -172,6 +172,7 @@ public class JSRuntime {
                 s.title = o.optString("name", o.optString("title", ""));
                 s.artist = o.optString("artist", o.optString("singer", ""));
                 s.album = o.optString("album", "");
+                s.albumId = o.optString("albumId", "");
                 s.coverUrl = o.optString("pic", o.optString("cover", ""));
                 s.duration = o.optLong("duration", 0);
                 s.sourceType = SourceProvider.SourceType.PUBLIC;

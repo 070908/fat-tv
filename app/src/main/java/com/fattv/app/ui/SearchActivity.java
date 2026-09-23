@@ -92,9 +92,10 @@ public class SearchActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void onSongClick(Song song) {
+private void onSongClick(Song song) {
         Intent intent = new Intent(this, PlayerActivity.class);
         intent.putExtra("song", song);
+        intent.putExtra("queue", new java.util.ArrayList<>(results));
         startActivity(intent);
     }
 }

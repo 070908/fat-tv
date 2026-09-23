@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <!-- ===== 左侧子导航 ===== -->
+    <LinearLayout
+        android:id="@+id/nav_discover_sidebar"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_lg"
+        android:background="@color/bg_surface">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发现"
+            android:textSize="@dimen/text_title"
+            android:textColor="@color/text_accent"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/spacing_lg" />
+
+        <TextView
+            android:id="@+id/nav_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="精选歌单"
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_primary"
+            android:padding="@dimen/spacing_md"
+            android:background="@drawable/tab_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <TextView
+            android:id="@+id/nav_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="新碟上架"
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_secondary"
+            android:padding="@dimen/spacing_md"
+            android:background="@drawable/tab_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <TextView
+            android:id="@+id/nav_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="热门歌手"
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_secondary"
+            android:padding="@dimen/spacing_md"
+            android:background="@drawable/tab_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <TextView
+            android:id="@+id/nav_genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="风格分类"
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_secondary"
+            android:padding="@dimen/spacing_md"
+            android:background="@drawable/tab_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true" />
+
+    </LinearLayout>
+
+    <!-- ===== 右侧内容区 ===== -->
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_discover_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_lg"
+            android:clipToPadding="false" />
+
+        <TextView
+            android:id="@+id/tv_discover_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="加载中..."
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/text_secondary"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

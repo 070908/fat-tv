@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/player_lyric_line_height"
+    android:gravity="center"
+    android:text="歌词行"
+    android:textSize="@dimen/text_headline"
+    android:textColor="@color/text_secondary"
+    android:textStyle="normal"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:paddingHorizontal="@dimen/spacing_md" />

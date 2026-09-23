@@ -7,10 +7,11 @@ import java.io.Serializable;
  * 歌曲数据模型
  */
 public class Song implements Serializable {
-    public String id;
+public String id;
     public String title;
     public String artist;
     public String album;
+    public String albumId;
     public String coverUrl;
 public long duration; // ms
     public SourceProvider.SourceType sourceType;

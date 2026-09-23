@@ -87,6 +87,7 @@ public class RankFragment extends TranslucentFragment {
     private void onSongClick(Song song) {
         Intent intent = new Intent(requireContext(), PlayerActivity.class);
         intent.putExtra("song", song);
+        intent.putExtra("queue", new java.util.ArrayList<>(rankSongs));
         startActivity(intent);
     }
 

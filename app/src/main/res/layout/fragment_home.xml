@@ -3,14 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/tv_safe_margin">
+    android:paddingTop="4dp" android:paddingBottom="4dp" android:paddingStart="16dp" android:paddingEnd="16dp">
 
-    <!-- 每日推荐横幅区（类似 algerkong 的每日推荐大卡片） -->
+    <!-- ===== 第1行：最近播放 ===== -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="最近播放"
+        android:textSize="@dimen/text_headline"
+        android:textColor="@color/text_accent"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_xs" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recent"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:clipToPadding="false"
+        android:layout_marginBottom="@dimen/spacing_sm" />
+
+    <!-- 最近播放空态 -->
+    <TextView
+        android:id="@+id/tv_recent_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无播放记录，请先搜索播放音乐"
+        android:textSize="@dimen/text_body"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+    <!-- ===== 第2行：每日推荐 ===== -->
     <FrameLayout
         android:id="@+id/banner_daily"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginBottom="@dimen/spacing_lg"
+        android:layout_height="64dp"
+        android:layout_marginBottom="@dimen/spacing_sm"
         android:background="@drawable/card_home_focusable"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -25,44 +53,71 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="\u6bcf\u65e5\u63a8\u8350"
-                android:textSize="@dimen/text_display"
+                android:text="每日推荐"
+                android:textSize="@dimen/text_headline"
                 android:textColor="@color/text_accent"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="\u6839\u636e\u60a8\u7684\u504f\u597d\u63a8\u8350\u97f3\u4e50"
+                android:text="根据您的偏好推荐音乐"
                 android:textSize="@dimen/text_caption"
                 android:textColor="@color/text_secondary"
-                android:layout_marginTop="@dimen/spacing_sm" />
+                android:layout_marginTop="@dimen/spacing_xs" />
         </LinearLayout>
     </FrameLayout>
 
-    <!-- 最近播放标题 -->
+    <!-- ===== 第3行：热门歌单 ===== -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\u6700\u8fd1\u64ad\u653e"
+        android:text="热门歌单"
         android:textSize="@dimen/text_headline"
         android:textColor="@color/text_accent"
         android:textStyle="bold"
-        android:layout_marginBottom="@dimen/spacing_md" />
+        android:layout_marginBottom="@dimen/spacing_xs" />
 
-    <!-- 最近播放横向滚动列表（2 列网格） -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_recent"
+        android:id="@+id/rv_playlists"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:clipToPadding="false"
+        android:layout_marginBottom="@dimen/spacing_sm" />
+
+    <!-- 热门歌单空态 -->
+    <TextView
+        android:id="@+id/tv_playlist_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无推荐歌单"
+        android:textSize="@dimen/text_body"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+    <!-- ===== 第4行：排行榜快捷入口 ===== -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="排行榜"
+        android:textSize="@dimen/text_headline"
+        android:textColor="@color/text_accent"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_xs" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_rank_quick"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false" />
 
-    <!-- 空态提示 -->
+    <!-- 排行榜空态 -->
     <TextView
-        android:id="@+id/tv_empty_hint"
+        android:id="@+id/tv_rank_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\u6682\u65e0\u64ad\u653e\u8bb0\u5f55\uff0c\u8bf7\u5148\u641c\u7d22\u64ad\u653e\u97f3\u4e50"
+        android:text="排行榜加载中..."
         android:textSize="@dimen/text_body"
         android:textColor="@color/text_secondary"
         android:visibility="gone"

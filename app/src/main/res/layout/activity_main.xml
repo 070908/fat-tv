@@ -63,28 +63,12 @@
                 android:clickable="true"
                 android:background="@drawable/tab_selector" />
 
-            <!-- Tab 按钮：歌单 -->
+            <!-- Tab 按钮：发现 -->
             <TextView
-                android:id="@+id/tab_playlist"
+                android:id="@+id/tab_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_playlist"
-                android:textSize="@dimen/text_headline"
-                android:textColor="@color/text_secondary"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:background="@drawable/tab_selector"
-                android:layout_marginStart="8dp" />
-
-            <!-- Tab 按钮：专辑 -->
-            <TextView
-                android:id="@+id/tab_album"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_album"
+                android:text="@string/tab_discover"
                 android:textSize="@dimen/text_headline"
                 android:textColor="@color/text_secondary"
                 android:paddingHorizontal="16dp"
@@ -127,12 +111,12 @@
                 android:background="@drawable/tab_selector"
                 android:layout_marginStart="8dp" />
 
-            <!-- Tab 按钮：本地音乐 -->
+            <!-- Tab 按钮：我的 -->
             <TextView
-                android:id="@+id/tab_local"
+                android:id="@+id/tab_mine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_local"
+                android:text="@string/tab_mine"
                 android:textSize="@dimen/text_headline"
                 android:textColor="@color/text_secondary"
                 android:paddingHorizontal="16dp"

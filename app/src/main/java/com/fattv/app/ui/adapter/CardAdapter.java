@@ -59,13 +59,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         if (item.coverUrl != null && !item.coverUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
                 .load(item.coverUrl)
-                .placeholder(R.drawable.ic_logo)
-                .error(R.drawable.ic_logo)
+                .placeholder(R.drawable.placeholder_cover)
+                .error(R.drawable.placeholder_cover)
                 .transition(DrawableTransitionOptions.withCrossFade(200))
                 .centerCrop()
                 .into(holder.ivCover);
         } else {
-            holder.ivCover.setImageResource(R.drawable.ic_logo);
+            holder.ivCover.setImageResource(R.drawable.placeholder_cover);
         }
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));

@@ -62,6 +62,8 @@
     <dimen name="player_progress_height">6dp</dimen>
     <dimen name="player_progress_corner">3dp</dimen>
     <dimen name="player_lyric_height">160dp</dimen>
+    <dimen name="player_lyric_line_height">56dp</dimen>
+    <dimen name="player_tab_height">44dp</dimen>
 
     <!-- ==================== 焦点动效 ==================== -->
     <!-- 焦点放大倍率（以百分比表示，100 = 1.0x） -->

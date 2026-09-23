@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 低内存封面占位图：纯矢量 shape，零位图解码成本，避免 Glide error 占位图 OOM -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="135"
+        android:startColor="#FF16161A"
+        android:centerColor="#FF0D0D10"
+        android:endColor="#FF1A1A20" />
+    <corners android:radius="8dp" />
+</shape>

@@ -111,10 +111,16 @@ public abstract class TranslucentFragment extends Fragment {
     private View findFirstFocusable(View view) {
         if (view == null) return null;
         if (view instanceof RecyclerView) {
-            focusListFirst((RecyclerView) view);
-            return view;
-        }
-        if (view.isFocusable() && view.isShown()) {
+            RecyclerView rv = (RecyclerView) view;
+            boolean hasData = rv.getAdapter() != null
+                    && rv.getAdapter().getItemCount() > 0
+                    && rv.getVisibility() == View.VISIBLE;
+            if (hasData) {
+                focusListFirst(rv);
+                return view;
+            }
+            // 空列表或不可见：跳过，继续向下查找其他可聚焦控件
+        } else if (view.isFocusable() && view.isShown()) {
             return view;
         }
         if (view instanceof ViewGroup) {

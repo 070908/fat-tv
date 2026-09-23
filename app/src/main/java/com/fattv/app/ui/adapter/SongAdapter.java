@@ -61,8 +61,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         if (song.coverUrl != null && !song.coverUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
                 .load(song.coverUrl)
-                .placeholder(R.drawable.ic_logo)
-                .error(R.drawable.ic_logo)
+                .placeholder(R.drawable.placeholder_cover)
+                .error(R.drawable.placeholder_cover)
                 .transition(DrawableTransitionOptions.withCrossFade(200))
                 .centerCrop()
                 .into(holder.ivCover);

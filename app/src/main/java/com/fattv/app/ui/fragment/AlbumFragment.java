@@ -180,6 +180,7 @@ public class AlbumFragment extends TranslucentFragment {
     private void onTrackClick(Song song) {
         Intent intent = new Intent(requireContext(), PlayerActivity.class);
         intent.putExtra("song", song);
+        intent.putExtra("queue", new java.util.ArrayList<>(tracks));
         startActivity(intent);
     }
 

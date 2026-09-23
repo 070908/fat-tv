@@ -13,11 +13,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.fattv.app.R;
 import com.fattv.app.source.SourceManager;
-import com.fattv.app.ui.fragment.AlbumFragment;
+import com.fattv.app.ui.fragment.DiscoverFragment;
 import com.fattv.app.ui.fragment.HomeFragment;
-import com.fattv.app.ui.fragment.LocalMusicFragment;
 import com.fattv.app.ui.fragment.MvFragment;
-import com.fattv.app.ui.fragment.PlaylistFragment;
 import com.fattv.app.ui.fragment.RankFragment;
 import com.fattv.app.ui.fragment.TranslucentFragment;
 
@@ -35,17 +33,17 @@ import com.fattv.app.ui.fragment.TranslucentFragment;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final int TAB_COUNT = 6;
+    private static final int TAB_COUNT = 5;
     private static final int NAV_COUNT = TAB_COUNT + 2; // + search + settings
     private static final int IDX_SEARCH = TAB_COUNT;
     private static final int IDX_SETTINGS = TAB_COUNT + 1;
     private static final int[] TAB_IDS = {
-            R.id.tab_home, R.id.tab_playlist, R.id.tab_album,
-            R.id.tab_rank, R.id.tab_mv, R.id.tab_local
+            R.id.tab_home, R.id.tab_discover, R.id.tab_rank,
+            R.id.tab_mv, R.id.tab_mine
     };
     private static final Class<? extends Fragment>[] TAB_FRAGMENTS = new Class[]{
-            HomeFragment.class, PlaylistFragment.class, AlbumFragment.class,
-            RankFragment.class, MvFragment.class, LocalMusicFragment.class
+            HomeFragment.class, DiscoverFragment.class, RankFragment.class,
+            MvFragment.class, HomeFragment.class // "我的"暂用HomeFragment占位，后续替换为MineFragment
     };
 
     private TextView[] tabViews = new TextView[TAB_COUNT];
@@ -58,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SourceManager.getInstance().init(this);
-        SourceManager.getInstance().checkAllHealth();
+        // 后台线程初始化音源，避免主线程阻塞导致低端电视 ANR/闪退
+        new Thread(() -> {
+            SourceManager.getInstance().init(MainActivity.this);
+            SourceManager.getInstance().checkAllHealth();
+        }).start();
 
         // 绑定 Tab 按钮并填充顶部导航数组
         for (int i = 0; i < TAB_COUNT; i++) {
